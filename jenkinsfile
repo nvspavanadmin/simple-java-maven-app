@@ -6,5 +6,13 @@ pipeline{
                 sh 'mvn install'
             }
         }
+        stage('code scan'){
+            steps {
+              withSonarQubeEnv('mysonarqube') {
+                sh 'sonar:sonar'
+              }
+            }
+        }
+        
     }
 }
