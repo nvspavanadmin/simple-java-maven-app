@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment {
+        scannerHome = tool 'sonarscanner5.0.1'
+    }
     stages{
         stage('build stage'){
             steps{
@@ -8,9 +11,15 @@ pipeline{
         }
         stage('code scan'){
             steps {
-              withSonarQubeEnv('mysonarqube') {
-                sh 'sonar:sonar'
-              }
+                withSonarQubeEnv('mysonarqube') {
+                    sh '''$SCANNER_HOME/bin/sonar-scanner\
+                     -Dsonar.projectKey=java-project-key \
+                    -Dsonar.projectName=java-scaneer \
+                    -Dsonar.sources=. \
+                    -Dsonar.java.binaries=target/classes \
+                    -Dsonar.sourceEncoding=UTF-8
+                    '''
+                }
             }
         }
         
